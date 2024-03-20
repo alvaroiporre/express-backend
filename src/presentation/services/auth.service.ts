@@ -1,5 +1,6 @@
 import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
 import { UserModel } from "../../data";
+import { bcrypAdapter } from "../../config";
 
 export class AuthService {
 
@@ -14,10 +15,10 @@ export class AuthService {
 
     try {
       const user = new UserModel(registerUserDto);
-      await user.save();
-
+      
       // Crypt pass
-
+      user.password = bcrypAdapter.hash(registerUserDto.password);
+      await user.save();
       // JWT to keep auth
 
       // Confiramation Email
