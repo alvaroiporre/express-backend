@@ -1,4 +1,4 @@
-import { CustomError, RegisterUserDto, UserEntity } from "../../domain";
+import { CustomError, LoginUserDto, RegisterUserDto, UserEntity } from "../../domain";
 import { UserModel } from "../../data";
 import { bcrypAdapter } from "../../config";
 
@@ -28,6 +28,22 @@ export class AuthService {
     } catch (error) {
       throw CustomError.internalServer(`${ error }`);
     }
+  }
+
+  public loginUer = async ( loginUserDto: LoginUserDto ) => {
+    const existUser = await UserModel.findOne({email: loginUserDto.email})
+
+    if ( !existUser ) throw CustomError.badRequest('User does not exist');
+
+    if (!bcrypAdapter.compare(loginUserDto.password, existUser.password)) throw CustomError.badRequest('User or Password incorrect');
+
+    const { password, ...rest } = UserEntity.fromObject(existUser);
+
+    return {
+      user: rest,
+      token: 'abc'
+    }
+    
   }
 
 }
