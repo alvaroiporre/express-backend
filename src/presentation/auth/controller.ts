@@ -27,11 +27,11 @@ export class AuthController {
   }
 
   loginUser = (req: Request, res: Response) => {
-    const [ error, loginDto ] = LoginUserDto.create(req.body);
+    const [ error, loginUserDto ] = LoginUserDto.create(req.body);
 
     if ( error ) return res.status(400).json({error});
 
-    this.authService.loginUer(loginDto!)
+    this.authService.loginUer(loginUserDto!)
       .then((user) => res.json(user))
       .catch((error) => this.handleError(error, res));
   }
