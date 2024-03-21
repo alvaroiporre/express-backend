@@ -98,6 +98,6 @@ export class AuthService {
     user.emailValidated = true;
 
     await user.save();
-    return user;
+    return true;
   }
 }
