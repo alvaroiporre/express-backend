@@ -24,4 +24,18 @@ export class CategoryService {
       throw CustomError.internalServer(`${ error }`);
     }
   }
+
+  async getCategories (user: UserEntity) {
+    try {
+      const categories = CategoryModel.find({user: user.id});
+      if ( !categories ) return [];
+      return (await categories).map(category => ({
+        id: category.id, 
+        name: category.name, 
+        available: category.available,
+      }));
+    } catch (error) {
+      throw CustomError.internalServer(`${ error }`);
+    }
+  }
 }
