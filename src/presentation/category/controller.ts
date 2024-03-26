@@ -26,6 +26,10 @@ export class CategoryController {
   }
 
   getCategories = async (req: Request, res: Response) => {
+    const { page = 1, limit = 10 }  = req.query;
+
+
+
     await this.categoryService.getCategories(req.body.user)
       .then( categories => res.status(200).json({categories}))
       .catch( error => this.handleError(error, res));
