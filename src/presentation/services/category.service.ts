@@ -28,15 +28,32 @@ export class CategoryService {
   async getCategories (user: UserEntity, paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
     try {
-      const categories = CategoryModel.find({user: user.id})
-        .skip((page - 1) * limit )
-        .limit(limit);
+      // const total = await CategoryModel.countDocuments();
+      // const categories = await CategoryModel.find({user: user.id})
+      //   .skip((page - 1) * limit )
+      //   .limit(limit);
+
+      const [total, categories] = await Promise.all([
+        CategoryModel.countDocuments(),
+        CategoryModel.find({user: user.id})
+          .skip((page - 1) * limit )
+          .limit(limit)
+      ])
+
       if ( !categories ) return [];
-      return (await categories).map(category => ({
+      return {
+        page,
+        limit,
+        total,
+        next: `/api/categories?page${ page + 1 }&limit${ limit }`,
+        prev: (page > 1)? `/api/categories?page${ page - 1 }&limit${ limit }`: null,
+        categories: categories.map(category => ({
         id: category.id, 
         name: category.name, 
         available: category.available,
-      }));
+      })),
+
+    }
     } catch (error) {
       throw CustomError.internalServer(`${ error }`);
     }
