@@ -23,6 +23,7 @@ export class ProductController {
     // this.categoryService.createCategory(createCategoryDto!, req.body.user)
     // .then( category =>  res.status(201).json( category ))
     // .catch( error => this.handleError(error, res));
+    return res.json('create products');
   }
 
   getProducts = async (req: Request, res: Response) => {
@@ -31,7 +32,7 @@ export class ProductController {
     const [error, paginationDto] = PaginationDto.create( +page, +limit);
 
     if ( error ) return res.status(400).json({ error })
-
+    return res.json('get products')
 
     // await this.categoryService.getCategories(req.body.user, paginationDto!)
     //   .then( categories => res.status(200).json({categories}))
