@@ -8,14 +8,10 @@ export class ProductService {
   async createProduct (createProductDto: CreateProductDto ) {
     const productExists = await ProductModel.findOne({ name: createProductDto.name })
     if ( productExists ) throw CustomError.badRequest('Product already exists');
-
-    const user = await UserModel.findById(createProductDto.user);
-    const category = await CategoryModel.findById(createProductDto.category);
+(createProductDto.category);
     try {
       const product = new ProductModel({
         ...createProductDto,
-        user,
-        category
       })
       await product.save();
 
