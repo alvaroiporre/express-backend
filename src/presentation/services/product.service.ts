@@ -34,6 +34,8 @@ export class ProductService {
         ProductModel.find()
           .skip((page - 1) * limit )
           .limit(limit)
+          .populate('user', 'name email')
+          .populate('category', 'name')
       ])
 
       if ( !products ) return [];
@@ -43,11 +45,7 @@ export class ProductService {
         total,
         next: `/api/categories?page${ page + 1 }&limit${ limit }`,
         prev: (page > 1)? `/api/categories?page${ page - 1 }&limit${ limit }`: null,
-        products: products.map(product => ({
-        id: product.id,
-        name: product.name, 
-        available: product.available,
-      })),
+        products: products,
 
     }
     } catch (error) {
